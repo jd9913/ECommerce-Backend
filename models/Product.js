@@ -35,7 +35,7 @@ Product.init(
       isNumeric: true
     }
   }
-    // define columns
+    
   },
   {
     sequelize,

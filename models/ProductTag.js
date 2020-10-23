@@ -13,7 +13,7 @@ ProductTag.init(
       autoIncrement: true,
     },
     
-    // define columns
+    
   },
   {
     sequelize,
