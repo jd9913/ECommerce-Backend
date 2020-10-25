@@ -9,19 +9,5 @@ router.use('/products', productRoutes);
 router.use('/tags', tagRoutes);
 
 
-//create the associations
-
-Category.hasMany(Product, {
-    foreignKey: 'category_id'
-});
-
-
-Product.belongsTo(Category, {
-    foreignKey: 'category_id',
-});
-
-
-
-
 
 module.exports = router;

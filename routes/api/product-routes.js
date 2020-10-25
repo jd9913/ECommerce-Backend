@@ -32,7 +32,18 @@ router.get('/', (req, res) => {
 // get one product
 router.get('/:id', (req, res) => {
   Product.findOne({
-    where: { id: req.params.id }
+    where: { id: req.params.id },
+    include: [
+      {
+        model: Category,
+        attributes: ['cat_name']
+      },
+      {
+        model: Tag,
+        attributes: ['tag_name']
+
+      }
+    ]
 
   })
     .then(dbProductData => {
