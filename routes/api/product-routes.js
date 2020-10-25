@@ -7,15 +7,15 @@ const { Product, Category, Tag, ProductTag } = require('../../models');
 router.get('/', (req, res) => {
   // find all products
   Product.findAll({
-    attributes: ['id', 'prod_name', 'price', 'stock'],
+    attributes: ['id', 'product_name', 'price', 'stock'],
     include: [
       {
         model: Category,
-        attributes: ['cat_name']
+        attributes: ['category_name']
       },
       {
-        model: Tag,
-        attributes: ['tag_name']
+        model: ProductTag,
+        attributes: ['tag_id']
 
       }
     ]
@@ -36,11 +36,11 @@ router.get('/:id', (req, res) => {
     include: [
       {
         model: Category,
-        attributes: ['cat_name']
+        attributes: ['category_name']
       },
       {
-        model: Tag,
-        attributes: ['tag_name']
+        model: ProductTag,
+        attributes: ['tag_id']
 
       }
     ]
@@ -63,9 +63,18 @@ router.get('/:id', (req, res) => {
 
 // create new product
 router.post('/', (req, res) => {
-  Product.f
+  Product.create({
   attributes: ['id', 'product_name', 'price', 'stock', 'tagIds'],
-
+  product_name: req.body.product_name,
+  price: req.body.price,
+  stock: req.body.stock,
+  include:[
+    {
+      model: ProductTag,
+      attributes: ['tag_id']
+    }
+  ]
+  })
     /* req.body should look like this...
       {
         product_name: "Basketball",
