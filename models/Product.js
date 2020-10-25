@@ -14,7 +14,7 @@ Product.init(
     primaryKey: true,
     autoIncrement: true
   },
-  prod_name: {
+  product_name: {
     type: DataTypes.STRING,
     allowNull: false,
 
@@ -34,8 +34,15 @@ Product.init(
     validate:{
       isNumeric: true
     }
-  }
-    
+  },
+  
+    category_id:{
+      type: DataTypes.INTEGER,
+      references:{
+        model: 'category',
+        key: 'id'
+      }
+    }
   },
   {
     sequelize,
