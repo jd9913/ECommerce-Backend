@@ -9,12 +9,19 @@ router.get('/', (req, res) => {
     attributes:['id', 'tag_name',],
     include:[
       {
-        model:Product,
-        attributes: ['product_name', 'price','stock'],
-        through: ProductTag,
-        as:'product_tag'
+        model:ProductTag,
+        attributes: ['product_id'],
+        include:{
+          model: Product,
+          attributes:['product_name', 'price', 'stock'],
+          include:{
+            model:Category,
+            attributes:['category_name']
+          }
+
+        }
       }
-     
+    
     ]
   })
  .then(dbTagData=>res.json(dbTagData))
@@ -33,10 +40,17 @@ router.get('/:id', (req, res) => {
     where:{id: req.params.id},
     include:[
       {
-        model:Product,
-        attributes: ['product_name', 'price','stock'],
-        through: ProductTag,
-        as:'product_tag'
+        model:ProductTag,
+        attributes: ['product_id'],
+        include:{
+          model: Product,
+          attributes:['product_name', 'price', 'stock'],
+          include:{
+            model:Category,
+            attributes:['category_name']
+          }
+
+        }
       }
     
     ]
@@ -52,14 +66,52 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new tag
+  Tag.create({
+    tag_name:req.body.tag_name,
+  })
+  .then(dbTagData=>res.json(dbTagData))
+  .catch(err=>{
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.put('/:id', (req, res) => {
   // update a tag's name by its `id` value
+  Tag.update(req.body,{
+    where:{
+      id: req.params.id,
+    },
+  })
+  .then((dbTagData)=>{
+    if(!dbTagData[0]){
+      res.status(404).json({message: 'no tag found'});
+      return;
+    }
+    res.json(dbTagData);
+  }).catch(err=>{
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 router.delete('/:id', (req, res) => {
   // delete on tag by its `id` value
+  Tag.destroy({
+    where:{
+      id:req.params.id
+    }
+  })
+  .then(dbTagData=>{
+    if(!dbTagData){
+      res.status(404).json({message: 'no tag found'});
+    }
+    res.json(dbTagData);
+  })
+  .catch(err=>{
+    console.log(err);
+    res.status(500).json(err);
+  });
 });
 
 module.exports = router;
